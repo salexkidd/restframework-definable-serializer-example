@@ -1,0 +1,32 @@
+[
+{
+  "model": "surveys.survey",
+  "pk": 1,
+  "fields": {
+    "title": "My First Survey",
+    "description": "This is sample My First Survey. You can change definition or post survey! \ud83d\udc4c",
+    "question": "main:\n  name: FirstSurvey\n  fields:\n  - name: gendar\n    field: definable_serializer.extra_fields.RadioField\n    field_args:\n    - - - male\n        - Male\n      - - female\n        - Female\n      - - other\n        - Other\n    field_kwargs:\n      label: Your gendar\n      help_text: Please choice your gendar\n      initial: other\n      inline: true\n\n  - name: favorite_food\n    field: CharField\n    field_kwargs:\n      label: what your favorite food?\n      help_text: Please input your favorite food\n\n  - name: favorite_animal\n    field: definable_serializer.extra_fields.NonNullableChoiceField\n    field_args:\n    - - - ''\n        - ' --- Please choice your favorite animal \ud83d\udc96--- '\n      - - cat\n        - \ud83d\ude3aCat\n      - - dog\n        - \ud83d\udc36Dog\n      - - hourse\n        - \ud83d\udc34Hourse\n      - - pig\n        - \ud83d\udc37Pig\n      - - bear\n        - \ud83d\udc3bBear\n    field_kwargs:\n      label: what your favorite animal?\n      help_text: Please choice your favorite animal\n\n  - name: favorite_animal\n    field: definable_serializer.extra_fields.NonNullableChoiceField\n    field_args:\n    - - - ''\n        - ' --- Please choice your favorite animal \ud83d\udc96--- '\n      - - cat\n        - \ud83d\ude3aCat\n      - - dog\n        - \ud83d\udc36Dog\n      - - hourse\n        - \ud83d\udc34Hourse\n      - - pig\n        - \ud83d\udc37Pig\n      - - bear\n        - \ud83d\udc3bBear\n    field_kwargs:\n      label: what your favorite animal?\n      help_text: Please choice your favorite animal\n\n  - name: favorite_language\n    field: definable_serializer.extra_fields.MultipleCheckboxField\n    field_args:\n    - - - lang-python\n        - Python Lang\n      - - lang-c\n        - C Lang\n      - - lang-perl\n        - Perl Lang\n      - - lang-Go\n        - Go Lang\n      - - lang-php\n        - Nasty PHP\n    field_kwargs:\n      label: what your favorite language?\n      help_text: Please choice your favorite language\n      required: true\n      inline: true\n\n  - name: agreement\n    field: definable_serializer.extra_fields.CheckRequiredField\n    field_kwargs:\n      label: agreement\n      help_text: Be sure to turn this on when posting\n",
+    "custom_css": ".form-group {\r\n    mergin-bottom: 10px;\r\n    padding: 10px;\r\n    border-bottom:1px solid #444444;\r\n}"
+  }
+},
+{
+  "model": "surveys.survey",
+  "pk": 2,
+  "fields": {
+    "title": "My Second Survey",
+    "description": "This is sample My Second Survey. You can change definition or post survey! \ud83d\udc4c",
+    "question": "main:\n  name: MySecondSerializer\n  fields:\n  - name: agreement_field\n    field: BooleanField\n    fields_kwargs:\n      required: true\n  - name: pet_choice_field\n    field: MultipleChoiceField\n    field_args:\n    - - - dog\n        - Dog\n      - - cat\n        - Cat\n      - - horse\n        - Horse\n",
+    "custom_css": null
+  }
+},
+{
+  "model": "surveys.survey",
+  "pk": 3,
+  "fields": {
+    "title": "My Third survey with code",
+    "description": "me: \"YAML file can contain a python code string...\"\r\nfriend: \"What you say!?\"",
+    "question": "main:\n  name: TestSerializer\n  fields:\n  - name: test_field_one\n    field: CharField\n    field_kwargs:\n      label: Test Field One\n      required: true\n      help_text: Please enter 'correct_data' string.\n\n      # Field validation method\r\n    validate_method: |\n      def validate_method(self, value):\n          from rest_framework import serializers\n          if value != \"correct_data\":\n              raise serializers.ValidationError(\"'correct_data string' please\")\n          return value\n\n  - name: test_field_two\n    field: CharField\n\n  # Serializer  validation method\r\n  validate_method: |-\n    def validate_method(self, data):\n        from rest_framework import serializers\n        if data[\"test_field_one\"] != data[\"test_field_two\"]:\n            raise serializers.ValidationError({\n                \"test_field_two\": \"Please put the same as 'Test Field One'.\"\n            })\n        return data\n",
+    "custom_css": ""
+  }
+}
+]

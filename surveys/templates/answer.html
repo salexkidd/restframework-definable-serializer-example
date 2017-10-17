@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load rest_framework %}
+
+
+{% block "custom_css" %}
+{{ survey.custom_css | safe }}
+{% endblock %}
+
+{% block "content" %}
+
+{% render_form serializer as form %}
+
+
+
+
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>{{ survey.title }}</h1>
+        <p>{{ survey.description }}</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        {% if thankyou %}
+            <div class="alert alert-success" role="alert">Thank you for posting! :)</div>
+        {% endif %}
+
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <form action="./" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                {% if showing %}
+                    <a href="/" class="btn btn-block btn-success">back to top</a>
+                {% else %}
+                    <input type="submit" value="post" class="btn btn-primary">
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
