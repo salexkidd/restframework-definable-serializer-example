@@ -1,60 +1,90 @@
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.exceptions import MethodNotAllowed, NotFound
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import (
+    SessionAuthentication,
+    BasicAuthentication,
+    TokenAuthentication
+)
 
 from . import models as surveys_models
 
 
 class Answer(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
+    authentication_classes = (SessionAuthentication, TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    renderer_classes = (TemplateHTMLRenderer, JSONRenderer,)
     template_name = 'answer.html'
 
-    def get(self, request, survey_pk):
+    def get_previous_answer(self, survey):
+        previous_answer = None
+        try:
+            previous_answer = surveys_models.Answer.objects.get(
+                respondent=self.request.user,
+                survey=survey
+            )
+        except surveys_models.Answer.DoesNotExist:
+            ...
+
+        return previous_answer
+
+    def get(self, request, survey_pk, format=None):
         survey = get_object_or_404(surveys_models.Survey, pk=survey_pk)
         serializer_class = survey.get_question_serializer_class()
-        serializer = serializer_class()
 
-        return Response({
-            'serializer': serializer,
-            'survey': survey,
-        })
+        # has Previous data?
+        previous_answer = self.get_previous_answer(survey)
+
+        serializer = serializer_class()
+        if previous_answer:
+            serializer = serializer_class(previous_answer.answer)
+
+        response = None
+        if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
+            response = Response({'serializer': serializer, 'survey': survey})
+        else:
+            if not previous_answer:
+                raise NotFound()
+            response = Response(serializer.data)
+
+        return response
 
     def post(self, request, survey_pk):
         survey = get_object_or_404(surveys_models.Survey, pk=survey_pk)
         serializer_class = survey.get_question_serializer_class()
         serializer = serializer_class(data=request.data)
-        if not serializer.is_valid():
-            return Response({'serializer': serializer, 'survey': survey})
 
-        surveys_models.Answer.objects.create(
-            survey=survey,
-            respondent=request.user,
-            answer=serializer.validated_data
-        )
+        response = None
+        if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
+            response = HttpResponseRedirect("/")
+            if not serializer.is_valid():
+                response = Response({'serializer': serializer, 'survey': survey})
+            else:
+                messages.add_message(
+                    request, messages.SUCCESS, 'Thank you for your posting! 💖')
 
-        return Response({
-            'serializer': serializer,
-            'survey': survey,
-            'showing': True,
-            'thankyou': True,
-        })
+        else:
+            serializer.is_valid(raise_exception=True)
+            response = Response(serializer.data)
 
+        if serializer.is_valid():
+            # has Previous data?
+            previous_answer = self.get_previous_answer(survey)
 
-class Show(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'answer.html'
+            if previous_answer:
+                previous_answer.answer = serializer.validated_data
+                previous_answer.save()
+            else:
+                surveys_models.Answer.objects.create(
+                    survey=survey,
+                    respondent=request.user,
+                    answer=serializer.validated_data
+                )
 
-    def get(self, request, answer_pk):
-        answer = get_object_or_404(surveys_models.Answer, pk=answer_pk)
-        survey = answer.survey
-
-        serializer_class = survey.get_question_serializer_class()
-        serializer = serializer_class(answer.answer)
-
-        return Response({
-            'serializer': serializer,
-            'survey': survey,
-            'showing': True,
-        })
+        return response

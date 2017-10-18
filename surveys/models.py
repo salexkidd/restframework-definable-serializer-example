@@ -66,3 +66,6 @@ class Answer(models.Model):
         blank=False,
         auto_now=True,
     )
+
+    class Meta:
+        unique_together = ("survey", "respondent",)

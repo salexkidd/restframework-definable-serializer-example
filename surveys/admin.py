@@ -21,6 +21,11 @@ class SurveyAdmin(DefinableSerializerAdmin):
 @admin.register(surveys_models.Answer)
 class AnswerAdmin(DefinableSerializerAdmin):
 
+    readonly_fields = (
+        "create_at",
+        "update_at",
+    )
+
     list_display = (
         "id",
         "survey",

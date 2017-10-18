@@ -11,9 +11,6 @@
 {% render_form serializer as form %}
 
 
-
-
-
 <div class="jumbotron">
     <div class="container">
         <h1>{{ survey.title }}</h1>
@@ -21,25 +18,22 @@
     </div>
 </div>
 
+
 <div class="container">
-
+    {% if serializer.is_valid == False %}
     <div class="row">
-        {% if thankyou %}
-            <div class="alert alert-success" role="alert">Thank you for posting! :)</div>
-        {% endif %}
-
+        <div class="alert alert-danger">
+            {{ serializer.errors }}
+        </div>
     </div>
+    {% endif %}
 
     <div class="row">
         <div class="col-12">
             <form action="./" method="POST">
                 {% csrf_token %}
                 {{ form }}
-                {% if showing %}
-                    <a href="/" class="btn btn-block btn-success">back to top</a>
-                {% else %}
-                    <input type="submit" value="post" class="btn btn-primary">
-                {% endif %}
+                <input type="submit" value="post" class="btn btn-primary">
             </form>
         </div>
     </div>

@@ -16,5 +16,13 @@
     "groups": [],
     "user_permissions": []
   }
+},
+{
+  "model": "authtoken.token",
+  "pk": "THIS_IS_TEST_AUTHORIZATION_TOKEN",
+  "fields": {
+    "user": 1,
+    "created": "2017-10-18T11:23:23.690Z"
+  }
 }
 ]

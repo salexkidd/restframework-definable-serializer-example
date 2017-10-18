@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
+    'bootstrap3',
     'definable_serializer',
     'codemirror2',
     'top',

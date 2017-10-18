@@ -8,11 +8,4 @@ urlpatterns = [
         survey_views.Answer.as_view(),
         name='answer'
     ),
-
-    url(
-        r'(?P<answer_pk>\d+)/show/$',
-        survey_views.Show.as_view(),
-        name='show',
-    ),
-
 ]
