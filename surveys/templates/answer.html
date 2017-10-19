@@ -23,7 +23,16 @@
     {% if serializer.is_valid == False %}
     <div class="row">
         <div class="alert alert-danger">
-            {{ serializer.errors }}
+            {% for field, content_list in serializer.errors.items %}
+            <ul>
+                <li>{{ field }}</li>
+                <ul>
+                    {% for content in content_list %}
+                    <li>{{content}}</li>
+                    {% endfor %}
+                </ul>
+            </ul>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
@@ -33,7 +42,7 @@
             <form action="./" method="POST">
                 {% csrf_token %}
                 {{ form }}
-                <input type="submit" value="post" class="btn btn-primary">
+                <input type="submit" value="post" class="btn btn-block btn-lg btn-success">
             </form>
         </div>
     </div>

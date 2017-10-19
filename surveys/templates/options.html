@@ -1,0 +1,35 @@
+{% extends "rest_framework/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load rest_framework %}
+
+{% block body %}
+<body class="{% block bodyclass %}{% endblock %}">
+    <div class="wrapper">
+        <div class="container">
+            <div id="content" role="main" aria-label="{% trans "content" %}">
+                {% block content %}
+                <div class="content-main" role="main" aria-label="{% trans "main content" %}">
+                    <div class="page-header"><h1>{{ name }}</h1></div>
+                    <div style="float:left">{% block description %}{{ description }}{% endblock %}</div>
+
+<br>
+<div class="response-info" aria-label="{% trans "response info" %}">
+    <pre class="prettyprint">
+<span class="meta nocode">
+{% autoescape off %}
+{% for key, val in response_headers|items %}
+<b>{{ key }}:</b> <span class="lit">{{ val|break_long_headers|urlize_quoted_links }}</span>
+{% endfor %}
+</span>{{ content|urlize_quoted_links }}</pre>{% endautoescape %}
+</div>
+
+
+
+                </div>
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
