@@ -35,10 +35,11 @@ class Answer(APIView):
         return previous_answer
 
     def initial(self, request, *args, **kwargs):
-        survey = get_object_or_404(surveys_models.Survey, pk=kwargs.get('survey_pk'))
+        super().initial(request, *args, **kwargs)
+        survey = get_object_or_404(
+            surveys_models.Survey, pk=kwargs.get('survey_pk'))
         self.previous_answer = self._get_previous_answer(survey)
         self.survey = getattr(self.previous_answer, "survey", None) or survey
-        super().initial(request, *args, **kwargs)
 
     def get_serializer(self, *args, **kwargs):
         return self.survey.get_question_serializer_class()(*args, **kwargs)
@@ -51,7 +52,8 @@ class Answer(APIView):
             serializer.is_valid()
 
         if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
-            response = Response({'serializer': serializer, 'survey': self.survey})
+            response = Response(
+                {'serializer': serializer, 'survey': self.survey})
         else:
             if not self.previous_answer:
                 raise NotFound()
@@ -66,7 +68,8 @@ class Answer(APIView):
         if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
             response = HttpResponseRedirect("/")
             if not serializer.is_valid():
-                response = Response({'serializer': serializer, 'survey': self.survey})
+                response = Response(
+                    {'serializer': serializer, 'survey': self.survey})
             else:
                 messages.add_message(
                     request, messages.SUCCESS, 'Thank you for posting! 💖')
@@ -93,5 +96,4 @@ class Answer(APIView):
                 "It can not be used except when "
                 "it is content-type: application/json."
             )
-
         return super().options(request, *args, **kwargs)

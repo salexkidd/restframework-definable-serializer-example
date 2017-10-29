@@ -6,19 +6,15 @@
 {{ survey.custom_css | safe }}
 {% endblock %}
 
+{% block "jumbotron" %}
+    <h1>{{ survey.title }}</h1>
+    <p>{{ survey.description }}</p>
+{% endblock "jumbotron" %}
+
+
 {% block "content" %}
 
 {% render_form serializer as form %}
-
-
-<div class="jumbotron">
-    <div class="container">
-        <h1>{{ survey.title }}</h1>
-        <p>{{ survey.description }}</p>
-    </div>
-</div>
-
-
 <div class="container">
     {% if serializer.is_valid == False %}
     <div class="row">

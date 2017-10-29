@@ -13,18 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.conf import settings
-from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 
 from top import views as top_views
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # top
-    url(r'^$', top_views.Top.as_view()),
+    url(r'^$', login_required(top_views.Top.as_view())),
 
     # surveys
     url(
@@ -32,6 +34,20 @@ urlpatterns = [
             'surveys.urls',
             namespace="surveys"
         ),
+    ),
+
+    url(
+        r'^login/$',
+        auth_views.login,
+        {'template_name': 'login.html'},
+        name="auth_login",
+    ),
+
+    url(
+        r'^logout/$',
+        auth_views.logout,
+        {'next_page': '/'},
+        name="auth_logout",
     ),
 
 ]

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load bootstrap3 %}
+
+{% block "custom_css" %}
+    .container {
+        margin-top: 30px;
+    }
+{% endblock %}
+
+{% block "jumbotron" %}
+    <h1>Login</h1>
+    <p>Hello!!</p>
+{% endblock "jumbotron" %}
+
+
+{% block "content" %}
+    <div class="container">
+        <div class="row login-prompt">
+            <form action="" method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-success block full-width m-b">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock "content" %}

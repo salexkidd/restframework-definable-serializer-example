@@ -1,8 +1,14 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
 
-from definable_serializer.models.compat import YAMLField
+from definable_serializer.models.compat import (
+    YAMLField as CompatYAMLField,
+    # JSONField as CompatJSONField
+)
+
+# from django.contrib.postgres.fields import JSONField as PGJSONField
+# from jsonfield import JSONField
+
 
 from definable_serializer.models import (
     DefinableSerializerByJSONField,
@@ -46,7 +52,7 @@ class Answer(models.Model):
         on_delete=models.CASCADE,
     )
 
-    answer = YAMLField(
+    answer = CompatYAMLField(
         null=False,
         blank=False,
         default={},

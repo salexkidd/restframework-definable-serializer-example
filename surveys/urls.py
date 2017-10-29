@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from . import views as survey_views
 
+
 urlpatterns = [
     url(
         r'(?P<survey_pk>\d+)/answer/$',

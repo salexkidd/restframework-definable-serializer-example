@@ -1,15 +1,12 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
+{% block "jumbotron" %}
+    <h1>definitive-serializer Test</h1>
+    <p class="lead">Serializer can be defined with YAML or JSON! Provide a dedicated model field, and can see serializer in rest framework browsable page</p>
+{% endblock "jumbotron" %}
+
 {% block "content" %}
-
-    <div class="jumbotron">
-        <div class="container">
-            <h1>definitive-serializer Test</h1>
-            <p class="lead">Serializer can be defined with YAML or JSON! Provide a dedicated model field, and can see serializer in rest framework browsable page</p>
-        </div>
-    </div>
-
     <div class="container">
         {% bootstrap_messages %}
     </div>
