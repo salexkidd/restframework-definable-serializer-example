@@ -2,5 +2,6 @@ django>=1.11
 djangorestframework>=3.7.0
 django-bootstrap3==9.0.0
 django-debug-toolbar==1.8
+django-extensions==1.9.6
 restframework-definable-serializer
 pillow
