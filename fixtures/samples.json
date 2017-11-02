@@ -24,96 +24,19 @@
   }
 },
 {
+  "model": "samples.yamlsample",
+  "pk": 4,
+  "fields": {
+    "title": "Using Validator class By YAML",
+    "sample_yaml": "main:\n  name: UsingValidator\n  fields:\n  - name: hello_only_field\n    field: CharField\n    field_kwargs:\n      style:\n        placeholder: '...'\n    validators:\n    - validator: definable_serializer.tests.test_serializers.CorrectDataValidator\n      args:\n      - hello\n  - name: goodbye_only_field\n    field: CharField\n    field_kwargs:\n      style:\n        placeholder: '...'\n    validators:\n    - validator: definable_serializer.tests.test_serializers.CorrectDataValidator\n      args:\n      - goodbye\n"
+  }
+},
+{
   "model": "samples.jsonsample",
   "pk": 1,
   "fields": {
     "title": "PersonSerializer by JSON  definition",
-    "sample_json": {
-      "main": {
-        "name": "PersonSerializerByJSON",
-        "fields": [
-          {
-            "name": "first_name",
-            "field": "CharField"
-          },
-          {
-            "name": "last_name",
-            "field": "CharField"
-          },
-          {
-            "name": "age",
-            "field": "IntegerField"
-          },
-          {
-            "name": "email",
-            "field": "EmailField"
-          },
-          {
-            "name": "sex",
-            "field": "definable_serializer.extra_fields.RadioField",
-            "field_args": [
-              [
-                [
-                  "male",
-                  "Male"
-                ],
-                [
-                  "other",
-                  "Other"
-                ],
-                [
-                  "female",
-                  "Female"
-                ]
-              ]
-            ],
-            "field_kwargs": {
-              "allow_blank": false,
-              "allow_null": false,
-              "initial": "other",
-              "inline": true
-            }
-          },
-          {
-            "name": "type",
-            "field": "definable_serializer.extra_fields.ChoiceWithBlankField",
-            "field_args": [
-              [
-                [
-                  "",
-                  "--------------"
-                ],
-                [
-                  "family",
-                  "Family"
-                ],
-                [
-                  "friend",
-                  "Friend"
-                ],
-                [
-                  "other",
-                  "Other"
-                ]
-              ]
-            ],
-            "field_kwargs": {
-              "allow_blank": false,
-              "allow_null": false
-            }
-          },
-          {
-            "name": "memo",
-            "field": "definable_serializer.extra_fields.TextField",
-            "field_kwargs": {
-              "required": false,
-              "max_length": 100,
-              "initial": "It's JSON mate :)"
-            }
-          }
-        ]
-      }
-    }
+    "sample_json": "{\n  \"main\": {\n    \"name\": \"PersonSerializerByJSON\",\n    \"fields\": [\n      {\n        \"name\": \"first_name\",\n        \"field\": \"CharField\"\n      },\n      {\n        \"name\": \"last_name\",\n        \"field\": \"CharField\"\n      },\n      {\n        \"name\": \"age\",\n        \"field\": \"IntegerField\"\n      },\n      {\n        \"name\": \"email\",\n        \"field\": \"EmailField\"\n      },\n      {\n        \"name\": \"sex\",\n        \"field\": \"definable_serializer.extra_fields.RadioField\",\n        \"field_args\": [\n          [\n            [\n              \"male\",\n              \"Male\"\n            ],\n            [\n              \"other\",\n              \"Other\"\n            ],\n            [\n              \"female\",\n              \"Female\"\n            ]\n          ]\n        ],\n        \"field_kwargs\": {\n          \"allow_blank\": false,\n          \"allow_null\": false,\n          \"initial\": \"other\",\n          \"inline\": true\n        }\n      },\n      {\n        \"name\": \"type\",\n        \"field\": \"definable_serializer.extra_fields.ChoiceWithBlankField\",\n        \"field_args\": [\n          [\n            [\n              \"\",\n              \"--------------\"\n            ],\n            [\n              \"family\",\n              \"Family\"\n            ],\n            [\n              \"friend\",\n              \"Friend\"\n            ],\n            [\n              \"other\",\n              \"Other\"\n            ]\n          ]\n        ],\n        \"field_kwargs\": {\n          \"allow_blank\": false,\n          \"allow_null\": false\n        }\n      },\n      {\n        \"name\": \"memo\",\n        \"field\": \"definable_serializer.extra_fields.TextField\",\n        \"field_kwargs\": {\n          \"required\": false,\n          \"max_length\": 100,\n          \"initial\": \"It's JSON mate :)\"\n        }\n      }\n    ]\n  }\n}"
   }
 },
 {
@@ -121,227 +44,7 @@
   "pk": 2,
   "fields": {
     "title": "AllFieldSerializer by JSON definition",
-    "sample_json": {
-      "main": {
-        "name": "AllFieldSerializerByJSON",
-        "fields": [
-          {
-            "name": "boolean_field",
-            "field": "BooleanField"
-          },
-          {
-            "name": "nullboolean_field",
-            "field": "NullBooleanField"
-          },
-          {
-            "name": "text_field",
-            "field": "definable_serializer.extra_fields.TextField",
-            "field_kwargs": {
-              "rows": 15,
-              "placeholder": "Hi. I'm pleaseholder! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            }
-          },
-          {
-            "name": "char_field",
-            "field": "CharField"
-          },
-          {
-            "name": "email_field",
-            "field": "EmailField"
-          },
-          {
-            "name": "regex_field",
-            "field": "RegexField",
-            "field_args": [
-              "a-zA-Z0-9"
-            ]
-          },
-          {
-            "name": "slug_field",
-            "field": "SlugField"
-          },
-          {
-            "name": "url_field",
-            "field": "URLField"
-          },
-          {
-            "name": "uuid_field",
-            "field": "UUIDField"
-          },
-          {
-            "name": "filepath_field",
-            "field": "FilePathField",
-            "field_args": "/"
-          },
-          {
-            "name": "ipaddress_field",
-            "field": "IPAddressField"
-          },
-          {
-            "name": "integer_field",
-            "field": "IntegerField"
-          },
-          {
-            "name": "decimal_field",
-            "field": "DecimalField",
-            "field_kwargs": {
-              "max_digits": 5,
-              "decimal_places": 2
-            }
-          },
-          {
-            "name": "datetime_field",
-            "field": "DateTimeField"
-          },
-          {
-            "name": "date_field",
-            "field": "DateField"
-          },
-          {
-            "name": "time_field",
-            "field": "TimeField"
-          },
-          {
-            "name": "duration_field",
-            "field": "DurationField"
-          },
-          {
-            "name": "duration_field",
-            "field": "DurationField"
-          },
-          {
-            "name": "choice_field",
-            "field": "ChoiceField",
-            "field_args": [
-              [
-                [
-                  1,
-                  "choice_one"
-                ],
-                [
-                  2,
-                  "choice_two"
-                ],
-                [
-                  3,
-                  "choice_three"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "non_nullable_choice_field",
-            "field": "definable_serializer.extra_fields.ChoiceWithBlankField",
-            "field_args": [
-              [
-                [
-                  "",
-                  "---- Please choice \ud83d\udc96---"
-                ],
-                [
-                  1,
-                  "choice_one"
-                ],
-                [
-                  2,
-                  "choice_two"
-                ],
-                [
-                  3,
-                  "choice_three"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "multiple_choice_field",
-            "field": "MultipleChoiceField",
-            "field_args": [
-              [
-                [
-                  1,
-                  "choice_one"
-                ],
-                [
-                  2,
-                  "choice_two"
-                ],
-                [
-                  3,
-                  "choice_three"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "radio_field",
-            "field": "definable_serializer.extra_fields.RadioField",
-            "field_args": [
-              [
-                [
-                  "one",
-                  "One(1)"
-                ],
-                [
-                  "two",
-                  "Two(2)"
-                ],
-                [
-                  "three",
-                  "Three(3)"
-                ]
-              ]
-            ]
-          },
-          {
-            "name": "radio_field_inline",
-            "field": "definable_serializer.extra_fields.RadioField",
-            "field_args": [
-              [
-                [
-                  "one",
-                  "One(1)"
-                ],
-                [
-                  "two",
-                  "Two(2)"
-                ],
-                [
-                  "three",
-                  "Three(3)"
-                ]
-              ]
-            ],
-            "field_kwargs": {
-              "inline": true
-            }
-          },
-          {
-            "name": "file_field",
-            "field": "FileField"
-          },
-          {
-            "name": "image_field",
-            "field": "ImageField"
-          },
-          {
-            "name": "json_field",
-            "field": "JSONField"
-          },
-          {
-            "name": "hidden_field",
-            "field": "HiddenField",
-            "field_kwargs": {
-              "default": "Hoi!"
-            }
-          },
-          {
-            "name": "readonly_field",
-            "field": "ReadOnlyField"
-          }
-        ]
-      }
-    }
+    "sample_json": "{\n  \"main\": {\n    \"name\": \"AllFieldSerializerByJSON\",\n    \"fields\": [\n      {\n        \"name\": \"boolean_field\",\n        \"field\": \"BooleanField\"\n      },\n      {\n        \"name\": \"nullboolean_field\",\n        \"field\": \"NullBooleanField\"\n      },\n      {\n        \"name\": \"text_field\",\n        \"field\": \"definable_serializer.extra_fields.TextField\",\n        \"field_kwargs\": {\n          \"rows\": 15,\n          \"placeholder\": \"Hi. I'm pleaseholder! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\"\n        }\n      },\n      {\n        \"name\": \"char_field\",\n        \"field\": \"CharField\"\n      },\n      {\n        \"name\": \"email_field\",\n        \"field\": \"EmailField\"\n      },\n      {\n        \"name\": \"regex_field\",\n        \"field\": \"RegexField\",\n        \"field_args\": [\n          \"a-zA-Z0-9\"\n        ]\n      },\n      {\n        \"name\": \"slug_field\",\n        \"field\": \"SlugField\"\n      },\n      {\n        \"name\": \"url_field\",\n        \"field\": \"URLField\"\n      },\n      {\n        \"name\": \"uuid_field\",\n        \"field\": \"UUIDField\"\n      },\n      {\n        \"name\": \"filepath_field\",\n        \"field\": \"FilePathField\",\n        \"field_args\": \"/\"\n      },\n      {\n        \"name\": \"ipaddress_field\",\n        \"field\": \"IPAddressField\"\n      },\n      {\n        \"name\": \"integer_field\",\n        \"field\": \"IntegerField\"\n      },\n      {\n        \"name\": \"decimal_field\",\n        \"field\": \"DecimalField\",\n        \"field_kwargs\": {\n          \"max_digits\": 5,\n          \"decimal_places\": 2\n        }\n      },\n      {\n        \"name\": \"datetime_field\",\n        \"field\": \"DateTimeField\"\n      },\n      {\n        \"name\": \"date_field\",\n        \"field\": \"DateField\"\n      },\n      {\n        \"name\": \"time_field\",\n        \"field\": \"TimeField\"\n      },\n      {\n        \"name\": \"duration_field\",\n        \"field\": \"DurationField\"\n      },\n      {\n        \"name\": \"duration_field\",\n        \"field\": \"DurationField\"\n      },\n      {\n        \"name\": \"choice_field\",\n        \"field\": \"ChoiceField\",\n        \"field_args\": [\n          [\n            [\n              1,\n              \"choice_one\"\n            ],\n            [\n              2,\n              \"choice_two\"\n            ],\n            [\n              3,\n              \"choice_three\"\n            ]\n          ]\n        ]\n      },\n      {\n        \"name\": \"non_nullable_choice_field\",\n        \"field\": \"definable_serializer.extra_fields.ChoiceWithBlankField\",\n        \"field_args\": [\n          [\n            [\n              \"\",\n              \"---- Please choice \ud83d\udc96---\"\n            ],\n            [\n              1,\n              \"choice_one\"\n            ],\n            [\n              2,\n              \"choice_two\"\n            ],\n            [\n              3,\n              \"choice_three\"\n            ]\n          ]\n        ]\n      },\n      {\n        \"name\": \"multiple_choice_field\",\n        \"field\": \"MultipleChoiceField\",\n        \"field_args\": [\n          [\n            [\n              1,\n              \"choice_one\"\n            ],\n            [\n              2,\n              \"choice_two\"\n            ],\n            [\n              3,\n              \"choice_three\"\n            ]\n          ]\n        ]\n      },\n      {\n        \"name\": \"radio_field\",\n        \"field\": \"definable_serializer.extra_fields.RadioField\",\n        \"field_args\": [\n          [\n            [\n              \"one\",\n              \"One(1)\"\n            ],\n            [\n              \"two\",\n              \"Two(2)\"\n            ],\n            [\n              \"three\",\n              \"Three(3)\"\n            ]\n          ]\n        ]\n      },\n      {\n        \"name\": \"radio_field_inline\",\n        \"field\": \"definable_serializer.extra_fields.RadioField\",\n        \"field_args\": [\n          [\n            [\n              \"one\",\n              \"One(1)\"\n            ],\n            [\n              \"two\",\n              \"Two(2)\"\n            ],\n            [\n              \"three\",\n              \"Three(3)\"\n            ]\n          ]\n        ],\n        \"field_kwargs\": {\n          \"inline\": true\n        }\n      },\n      {\n        \"name\": \"file_field\",\n        \"field\": \"FileField\"\n      },\n      {\n        \"name\": \"image_field\",\n        \"field\": \"ImageField\"\n      },\n      {\n        \"name\": \"json_field\",\n        \"field\": \"JSONField\"\n      },\n      {\n        \"name\": \"hidden_field\",\n        \"field\": \"HiddenField\",\n        \"field_kwargs\": {\n          \"default\": \"Hoi!\"\n        }\n      },\n      {\n        \"name\": \"readonly_field\",\n        \"field\": \"ReadOnlyField\"\n      }\n    ]\n  }\n}"
   }
 },
 {
@@ -349,54 +52,15 @@
   "pk": 3,
   "fields": {
     "title": "GroupSerializer(Depending Person Serializer) by JSON",
-    "sample_json": {
-      "main": {
-        "name": "GroupSerializerByJSON",
-        "fields": [
-          {
-            "name": "group_name",
-            "field": "CharField",
-            "field_kwargs": {
-              "label": "Group name",
-              "required": true,
-              "help_text": "Please enter group name"
-            }
-          },
-          {
-            "name": "person_list",
-            "field": "PersonSerializer",
-            "field_kwargs": {
-              "many": true
-            }
-          }
-        ]
-      },
-      "depending_serializers": [
-        {
-          "name": "PersonSerializer",
-          "fields": [
-            {
-              "name": "username_field",
-              "field": "CharField",
-              "field_kwargs": {
-                "label": "Username",
-                "required": true,
-                "initial": ""
-              }
-            },
-            {
-              "name": "email_field",
-              "field": "EmailField",
-              "field_kwargs": {
-                "label": "Email",
-                "required": true,
-                "initial": ""
-              }
-            }
-          ]
-        }
-      ]
-    }
+    "sample_json": "{\n  \"main\": {\n    \"name\": \"GroupSerializerByJSON\",\n    \"fields\": [\n      {\n        \"name\": \"group_name\",\n        \"field\": \"CharField\",\n        \"field_kwargs\": {\n          \"label\": \"Group name\",\n          \"required\": true,\n          \"help_text\": \"Please enter group name\"\n        }\n      },\n      {\n        \"name\": \"person_list\",\n        \"field\": \"PersonSerializer\",\n        \"field_kwargs\": {\n          \"many\": true\n        }\n      }\n    ]\n  },\n  \"depending_serializers\": [\n    {\n      \"name\": \"PersonSerializer\",\n      \"fields\": [\n        {\n          \"name\": \"username_field\",\n          \"field\": \"CharField\",\n          \"field_kwargs\": {\n            \"label\": \"Username\",\n            \"required\": true,\n            \"initial\": \"\"\n          }\n        },\n        {\n          \"name\": \"email_field\",\n          \"field\": \"EmailField\",\n          \"field_kwargs\": {\n            \"label\": \"Email\",\n            \"required\": true,\n            \"initial\": \"\"\n          }\n        }\n      ]\n    }\n  ]\n}"
+  }
+},
+{
+  "model": "samples.jsonsample",
+  "pk": 4,
+  "fields": {
+    "title": "Using Validator class by JSON",
+    "sample_json": "{\n  \"main\": {\n    \"name\": \"UsingValidator\",\n    \"fields\": [\n      {\n        \"name\": \"hello_only_field\",\n        \"field\": \"CharField\",\n        \"field_kwargs\": {\n          \"style\": {\n            \"placeholder\": \"...\"\n          }\n        },\n        \"validators\": [\n          {\n            \"validator\": \"definable_serializer.tests.test_serializers.CorrectDataValidator\",\n            \"args\": [\n              \"hello\"\n            ]\n          }\n        ]\n      },\n      {\n        \"name\": \"goodbye_only_field\",\n        \"field\": \"CharField\",\n        \"field_kwargs\": {\n          \"style\": {\n            \"placeholder\": \"...\"\n          }\n        },\n        \"validators\": [\n          {\n            \"validator\": \"definable_serializer.tests.test_serializers.CorrectDataValidator\",\n            \"args\": [\n              \"goodbye\"\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}"
   }
 },
 {
@@ -405,17 +69,7 @@
   "fields": {
     "title": "MultipleSerializer field in SingleObject",
     "sample_one": "main:\n  name: TestSerializerForYAML\n  fields:\n  - name: test_field\n    field: CharField\n",
-    "sample_two": {
-      "main": {
-        "name": "TestSerializerForJSON",
-        "fields": [
-          {
-            "name": "test_field",
-            "field": "CharField"
-          }
-        ]
-      }
-    }
+    "sample_two": "{\n  \"main\": {\n    \"name\": \"TestSerializerForJSON\",\n    \"fields\": [\n      {\n        \"name\": \"test_field\",\n        \"field\": \"CharField\"\n      }\n    ]\n  }\n}"
   }
 }
 ]
