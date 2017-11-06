@@ -1,0 +1,4 @@
+master:
+  build: .
+  ports:
+    - "18085:8085"

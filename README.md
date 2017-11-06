@@ -28,6 +28,20 @@ You see the login page. enter the ID and Password (See below)
 
 <img height="50%" width="50%" src="https://github.com/salexkidd/restframework-definable-serializer-example/blob/master/imgs/login.png">
 
+## Using docker
+
+We provide Dockerfile. You can run the demo on Docker
+
+```shell
+$ git clone https://github.com/salexkidd/restframework-definable-serializer-example.git
+$ docker-compose up --build -d
+```
+
+Please open the "http://localhost:18085" in the browser. You can see the login page.
+
+You see the login page. enter the ID and Password (See above)
+
+
 # 📷snapshot
 
 ## top page
