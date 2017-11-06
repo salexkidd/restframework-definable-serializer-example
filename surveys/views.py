@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
+
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.exceptions import MethodNotAllowed, NotFound
@@ -14,7 +16,7 @@ from rest_framework.authentication import (
 from . import models as surveys_models
 
 
-class Answer(APIView):
+class Answer(GenericAPIView):
     """
     Answer API
     """
@@ -41,8 +43,8 @@ class Answer(APIView):
         self.previous_answer = self._get_previous_answer(survey)
         self.survey = getattr(self.previous_answer, "survey", None) or survey
 
-    def get_serializer(self, *args, **kwargs):
-        return self.survey.get_question_serializer_class()(*args, **kwargs)
+    def get_serializer_class(self, *args, **kwargs):
+        return self.survey.get_question_serializer_class(*args, **kwargs)
 
     def get(self, request, survey_pk, format=None):
         response = None
