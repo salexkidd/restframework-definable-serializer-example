@@ -19,11 +19,22 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 
+from rest_framework.schemas import get_schema_view
+from rest_framework.documentation import include_docs_urls
+
 from top import views as top_views
+
+
+schema_view = get_schema_view(title='Example')
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+
+    # schema
+    url(r'^schema/$', schema_view),
+    url(r'^docs/', include_docs_urls(title='API Docs')),
+
 
     # top
     url(r'^$', login_required(top_views.Top.as_view())),

@@ -114,3 +114,8 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = '/login/'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning'
+}

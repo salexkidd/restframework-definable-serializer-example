@@ -1,19 +1,30 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+try:
+    from django.urls import resolve
+except ModuleNotFoundError as e:
+    from django.core.urlresolvers import resolve
 
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-
+from rest_framework import serializers as rf_serializers
 from rest_framework.response import Response
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.exceptions import MethodNotAllowed, NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import (
     SessionAuthentication, TokenAuthentication
 )
+from rest_framework.renderers import(
+    TemplateHTMLRenderer, JSONRenderer, CoreJSONRenderer
+)
+
+from drf_openapi.entities import OpenApiSchemaGenerator, OpenApiDocument
+from drf_openapi.codec import OpenAPIRenderer
 
 from . import models as surveys_models
+
+import coreapi
 
 
 class Answer(GenericAPIView):
@@ -21,7 +32,7 @@ class Answer(GenericAPIView):
     Answer API
     """
     allowed_methods = ("GET", "POST", "OPTIONS",)
-    renderer_classes = (TemplateHTMLRenderer, JSONRenderer,)
+    renderer_classes = (TemplateHTMLRenderer, JSONRenderer, OpenAPIRenderer,)
     authentication_classes = (SessionAuthentication, TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     template_name = 'answer.html'
@@ -44,7 +55,10 @@ class Answer(GenericAPIView):
         self.survey = getattr(self.previous_answer, "survey", None) or survey
 
     def get_serializer_class(self, *args, **kwargs):
-        return self.survey.get_question_serializer_class(*args, **kwargs)
+        try:
+            return self.survey.get_question_serializer_class(*args, **kwargs)
+        except Exception as e:
+            return rf_serializers.Serializer
 
     def get(self, request, survey_pk, format=None):
         response = None
@@ -56,6 +70,19 @@ class Answer(GenericAPIView):
         if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
             response = Response(
                 {'serializer': serializer, 'survey': self.survey})
+
+        elif isinstance(self.request.accepted_renderer, OpenAPIRenderer):
+
+            schema_gen = OpenApiSchemaGenerator(version=1.0,)
+
+            schema = OpenApiDocument(
+                version=1.0,
+                content={
+                    'answer': schema_gen.get_link(self.request.path, "POST", self)
+                },
+            )
+            response = Response(schema)
+
         else:
             if not self.previous_answer:
                 raise NotFound()
