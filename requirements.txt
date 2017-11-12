@@ -1,8 +1,10 @@
-django>=1.11
-djangorestframework>=3.7.0
+coreapi==2.3.3
+Django>=1.11,<1.12
+djangorestframework>=3.7,<3.8
 django-bootstrap3==9.0.0
 django-debug-toolbar==1.8
 django-extensions==1.9.6
+-e git+https://github.com/limdauto/drf_openapi.git#egg=drf_openapi
+Pillow==4.3.0
 restframework-definable-serializer
-coreapi
-pillow
+coreapi==2.3.3

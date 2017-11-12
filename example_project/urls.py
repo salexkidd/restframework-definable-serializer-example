@@ -22,8 +22,9 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.schemas import get_schema_view
 from rest_framework.documentation import include_docs_urls
 
-from top import views as top_views
+from drf_openapi.views import SchemaView
 
+from top import views as top_views
 
 schema_view = get_schema_view(title='Example')
 
@@ -31,10 +32,9 @@ schema_view = get_schema_view(title='Example')
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
-    # schema
+    # schema and docs
     url(r'^schema/$', schema_view),
     url(r'^docs/', include_docs_urls(title='API Docs')),
-
 
     # top
     url(r'^$', login_required(top_views.Top.as_view())),
@@ -47,6 +47,7 @@ urlpatterns = [
         ),
     ),
 
+    # Login and Logout
     url(
         r'^login/$',
         auth_views.login,
@@ -60,6 +61,12 @@ urlpatterns = [
         {'next_page': '/'},
         name="auth_logout",
     ),
+
+    url(
+        r'^api-auth/',
+        include('rest_framework.urls', namespace='rest_framework')
+    )
+
 
 ]
 

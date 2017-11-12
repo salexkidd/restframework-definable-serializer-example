@@ -6,123 +6,58 @@ try:
 except ModuleNotFoundError as e:
     from django.core.urlresolvers import resolve
 
-from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView
-from rest_framework import serializers as rf_serializers
+from rest_framework import serializers
 from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView
 from rest_framework.exceptions import MethodNotAllowed, NotFound
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import (
-    SessionAuthentication, TokenAuthentication
-)
-from rest_framework.renderers import(
-    TemplateHTMLRenderer, JSONRenderer, CoreJSONRenderer
-)
-
-from drf_openapi.entities import OpenApiSchemaGenerator, OpenApiDocument
-from drf_openapi.codec import OpenAPIRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from . import models as surveys_models
 
-import coreapi
+
+from definable_serializer.contrib.pickup_serializer.viewsets import(
+    PickupSerializerViewSet
+)
 
 
-class Answer(GenericAPIView):
-    """
-    Answer API
-    """
-    allowed_methods = ("GET", "POST", "OPTIONS",)
-    renderer_classes = (TemplateHTMLRenderer, JSONRenderer, OpenAPIRenderer,)
-    authentication_classes = (SessionAuthentication, TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+class AnswerViewSet(PickupSerializerViewSet):
     template_name = 'answer.html'
+    lookup_field = "survey__pk"
+    queryset = surveys_models.Answer.objects.all()
 
-    def _get_previous_answer(self, survey):
-        previous_answer = None
-        try:
-            previous_answer = surveys_models.Answer.objects.get(
-                respondent=self.request.user, survey=survey)
-        except surveys_models.Answer.DoesNotExist:
-            pass
+    serializer_queryset = surveys_models.Survey.objects.all()
+    serializer_field_name = "question"
+    data_store_field_name = "answer"
 
-        return previous_answer
+    def get_api_name(self):
+        definition_obj = self.get_serializer_define_object()
+        return "Answer for {}".format(definition_obj.title)
 
-    def initial(self, request, *args, **kwargs):
-        super().initial(request, *args, **kwargs)
-        survey = get_object_or_404(
-            surveys_models.Survey, pk=kwargs.get('survey_pk'))
-        self.previous_answer = self._get_previous_answer(survey)
-        self.survey = getattr(self.previous_answer, "survey", None) or survey
+    def get_unique_key_data(self):
+        return {"respondent": self.request.user}
 
-    def get_serializer_class(self, *args, **kwargs):
-        try:
-            return self.survey.get_question_serializer_class(*args, **kwargs)
-        except Exception as e:
-            return rf_serializers.Serializer
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(
+            *args, **kwargs).filter(respondent=self.request.user)
 
-    def get(self, request, survey_pk, format=None):
-        response = None
-        serializer = self.get_serializer()
-        if self.previous_answer:
-            serializer = self.get_serializer(data=self.previous_answer.answer)
-            serializer.is_valid()
-
+    def retrieve(self, *args, **kwargs):
         if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
-            response = Response(
-                {'serializer': serializer, 'survey': self.survey})
+            serializer = self.get_serializer()
+            return Response({"serializer": serializer})
 
-        elif isinstance(self.request.accepted_renderer, OpenAPIRenderer):
-
-            schema_gen = OpenApiSchemaGenerator(version=1.0,)
-
-            schema = OpenApiDocument(
-                version=1.0,
-                content={
-                    'answer': schema_gen.get_link(self.request.path, "POST", self)
-                },
-            )
-            response = Response(schema)
-
-        else:
-            if not self.previous_answer:
-                raise NotFound()
-            response = Response(serializer.data)
-
+        response = super().retrieve(*args, **kwargs)
         return response
 
-    def post(self, request, survey_pk):
-        response = None
-        serializer = self.get_serializer(data=self.request.data)
+    def perform_create(self, serializer):
+        # if not define obj, raise 404
+        self.get_serializer_define_object()
+        self.get_queryset().model.objects.create(
+            respondent=self.request.user,
+            survey=self.get_serializer_define_object(),
+            **{self.data_store_field_name: serializer.validated_data}
+        )
 
-        if isinstance(self.request.accepted_renderer, TemplateHTMLRenderer):
-            response = HttpResponseRedirect("/")
-            if not serializer.is_valid():
-                response = Response(
-                    {'serializer': serializer, 'survey': self.survey})
-            else:
-                messages.add_message(
-                    request, messages.SUCCESS, 'Thank you for posting! 💖')
-        else:
-            serializer.is_valid(raise_exception=True)
-            response = Response(serializer.data)
-
-        if serializer.is_valid():
-            if self.previous_answer:
-                self.previous_answer.answer = serializer.validated_data
-                self.previous_answer.save()
-            else:
-                surveys_models.Answer.objects.create(
-                    survey=self.survey,
-                    respondent=request.user,
-                    answer=serializer.validated_data
-                )
-
-        return response
-
-    def options(self, request, *args, **kwargs):
-        if request.accepted_media_type == TemplateHTMLRenderer.media_type:
-            raise MethodNotAllowed(
-                "It can not be used except when "
-                "it is content-type: application/json."
-            )
-        return super().options(request, *args, **kwargs)
+    def get_template_context(self):
+        context = super().get_template_context()
+        context["survey"] = self.get_serializer_define_object()
+        return context

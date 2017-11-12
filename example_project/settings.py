@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_openapi',
     'bootstrap3',
     'definable_serializer',
     'codemirror2',
@@ -108,7 +109,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
+# https://docs.djangoproject.com/en/1.11/howto/e-files/
 
 STATIC_URL = '/static/'
 
@@ -117,5 +118,35 @@ LOGIN_URL = '/login/'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning'
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'definable_serializer.contrib.pickup_serializer.renderers.TemplateHTMLPickupSerializerRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.SchemaJSRenderer',
+        'rest_framework.renderers.CoreJSONRenderer',
+        'rest_framework.renderers.DocumentationRenderer',
+        'definable_serializer.contrib.pickup_serializer.renderers.CoreJSONPickupSerializerRenderer',
+        'definable_serializer.contrib.pickup_serializer.renderers.OpenAPIPickupSerializerSchemaRenderer',
+        'definable_serializer.contrib.pickup_serializer.renderers.SwaggerUIPickupSerializerRenderer',
+    ),
+}
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'SECURITY_DEFINITIONS': {
+        "api_key": {
+            "type": "apiKey",
+            "name": "Authorization Token ******",
+            "in": "header"
+        },
+
+    },
 }

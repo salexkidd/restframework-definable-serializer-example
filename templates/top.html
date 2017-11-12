@@ -2,33 +2,38 @@
 {% load bootstrap3 %}
 
 {% block "jumbotron" %}
-    <h1>definitive-serializer Test</h1>
-    <p class="lead">Serializer can be defined with YAML or JSON! Provide a dedicated model field, and can see serializer in rest framework browsable page</p>
+<h1>definable-serializer Test</h1>
+<p class="lead">Serializer can be defined with YAML or JSON! Provide a dedicated model field, and can see serializer in rest framework browsable page</p>
 {% endblock "jumbotron" %}
 
 {% block "content" %}
-    <div class="container">
-        {% bootstrap_messages %}
-    </div>
+<div class="container">
+  {% bootstrap_messages %}
+</div>
 
-    <div class="container">
-        <h2> 📛 Survey List 📛</h2>
-        <hr>
-        <div class="row">
-            {% for survey in survey_list %}
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h3>{{ survey.title }}</h3>
-                        <p>{{ survey.description }}</p>
-                        <p>
-                            <a href="{% url "surveys:answer" survey.pk %}" class="btn btn-primary" role="button">answer</a>
-                            <a href="{% url "admin:surveys_survey_change" survey.pk %}" class="btn btn-default" role="button">show definition</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+<div class="container">
+  <h2> 📛 Survey List 📛</h2>
+  <hr>
+  <div class="row">
+    {% for survey in survey_list %}
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <div class="caption">
+          <h3>{{ survey.title }}</h3>
+          <p>{{ survey.description }}</p>
+          <p>
+            <a href="{% url "surveys:answer-detail" survey.pk %}" class="btn btn-primary" role="button">answer (form)</a>
+            <a href="{% url "surveys:answer-detail" survey.pk %}" class="btn btn-warning" role="button">answer (VueJS)</a>
+            <hr>
+            <p><a href="{% url "surveys:answer-detail" survey.pk %}?format=swagger-pickup-serializer">Swagger</a></p>
+            <p><a href="{% url "surveys:answer-detail" survey.pk %}?format=openapi-pickup-serializer-schema">Open API Schema</a></p>
+            <p><a href="{% url "surveys:answer-detail" survey.pk %}?format=corejson-pickup-serializer">Core JSON</a></p>
+            <p><a href="{% url "admin:surveys_survey_change" survey.pk %}">Show definition</a></p>
+          </p>
         </div>
+      </div>
     </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
