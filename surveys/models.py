@@ -45,7 +45,10 @@ class Survey(AbstractDefinitiveSerializerModel):
 
 class Answer(models.Model):
 
-    survey = models.ForeignKey("Survey")
+    survey = models.ForeignKey(
+        "Survey",
+        on_delete=models.CASCADE,
+    )
 
     respondent = models.ForeignKey(
         settings.AUTH_USER_MODEL,
