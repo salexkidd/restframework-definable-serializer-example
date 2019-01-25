@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+
 from django.contrib.auth.decorators import login_required
 
 from top import views as top_views
@@ -32,21 +33,18 @@ urlpatterns = [
     url(
         r'^surveys/', include(
             'surveys.urls',
-            namespace="surveys"
         ),
     ),
 
     url(
         r'^login/$',
-        auth_views.login,
-        {'template_name': 'login.html'},
+        auth_views.LoginView.as_view(template_name="login.html"),
         name="auth_login",
     ),
 
     url(
         r'^logout/$',
-        auth_views.logout,
-        {'next_page': '/'},
+        auth_views.LogoutView.as_view(next_page="/"),
         name="auth_logout",
     ),
 
